@@ -1,7 +1,5 @@
 # Image Gallery
 
----
-
 Image Gallery is an open-source image sharing platform alternate to google photos
 
 ## Updates
