@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+
+    <div th:replace="my-navbar :: nav"></div>
+
+    <div class="container my-container">
+        <h1 class="text-center text-info-emphasis fs-1">Welcome to Image Gallery</h1>
+        <div th:if="${session.msg}">
+            <p class="text-success mt-2 text-center" th:text="${session.msg}"></p>
+            <div th:text="${@imageServiceImpl.removeSessionMsg()}"></div>
+
+
+        </div>
+        <div class="mt-5">
+
+
+            <table class="table table-bordered table-hover w-75 mx-auto text-left">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Roles</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="tempUser:${users}">
+                        <td th:text="${tempUser.userName}"></td>
+                        <td th:text="${tempUser.email}"></td>
+                        <td>
+                            <ul class="role-list">
+                                <li th:each="tempRole :${tempUser.roles}" th:text="${tempRole.name}"></li>
+                            </ul>
+                        </td>
+                        <td><a th:href="@{/imagegallery/admin/addrole/{userId}(userId=${tempUser.userId})}"
+                                class="btn btn-outline-dark">Add Role</a></td>
+                    </tr>
+
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/21ffbf0563.js" crossorigin="anonymous">
+    </script>
+
+</body>
+
+</html>
