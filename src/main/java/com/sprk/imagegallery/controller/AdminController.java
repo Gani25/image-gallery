@@ -38,15 +38,24 @@ public class AdminController {
     }
 
     @GetMapping("/admin/addrole/{userId}")
-    public String showRoleForm(@PathVariable int userId, Model model) {
+    public String showRoleForm(@PathVariable int userId, Model model, HttpSession session) {
 
-        List<RoleModel> roles = roleRepository.findAll();
+        UserModel userModel = userService.findUserById(userId);
+        if (userModel != null) {
 
-        model.addAttribute("roles", roles);
-        model.addAttribute("roleObj", new RoleModel());
-        model.addAttribute("userId", userId);
+            List<RoleModel> roles = roleRepository.findAll();
 
-        return "role-form";
+            model.addAttribute("roles", roles);
+            model.addAttribute("roleObj", new RoleModel());
+            model.addAttribute("userId", userId);
+
+            return "role-form";
+        } else {
+
+            session.setAttribute("msg", "User not found..");
+            return "redirect:/imagegallery/admin/listusers";
+
+        }
     }
 
     @PostMapping("/admin/addrole/{userId}")
@@ -71,6 +80,7 @@ public class AdminController {
 
             return "redirect:/imagegallery/admin/listusers";
         }
+
     }
 
 }

@@ -33,6 +33,9 @@
             </div>
             <form th:action="@{/authenticateUser}" method="post">
 
+                <div th:if="${msg}">
+                    <p class="text-success mt-2 text-center" th:text="${msg}"></p>
+                </div>
                 <div th:if="${session.msg}">
                     <p class="text-success mt-2 text-center" th:text="${session.msg}"></p>
                     <div th:text="${@userServiceImpl.removeSessionMsg()}"></div>

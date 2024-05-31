@@ -28,10 +28,10 @@
 
         <div class="w-75 mx-auto mt-5">
 
-            <form th:action="@{'/imagegallery/user/image/'+${session.user.userId}}" th:object="${imageObj}"
-                method="post" enctype="multipart/form-data">
-                <input type="text" th:field="*{imageId}" hidden>
-                <input type="text" th:field="*{imageTitle}" hidden>
+            <form th:action="@{/imagegallery/user/image}" th:object="${imageObj}" method="post"
+                enctype="multipart/form-data">
+                <!-- <input type="text" th:field="*{imageId}" hidden>
+                <input type="text" th:field="*{imageTitle}" hidden> -->
 
                 <div class="input-group mb-3">
                     <label for="image" class="input-group-text">Upload Image</label>

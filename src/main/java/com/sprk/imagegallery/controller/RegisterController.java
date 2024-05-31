@@ -78,10 +78,11 @@ public class RegisterController {
         }
     }
 
-    @GetMapping("user/profile/{userId}")
-    public String showProfilePage(@PathVariable int userId, Model model, HttpSession session) {
+    @GetMapping("user/profile")
+    public String showProfilePage(Model model, HttpSession session) {
 
-        UserDTO userDTO = userService.getUserByUserId(userId);
+        UserModel sessionUser = (UserModel) session.getAttribute("user");
+        UserDTO userDTO = userService.getUserByUserId(sessionUser.getUserId());
         if (userDTO == null) {
             session.setAttribute("msg", "User not found!!");
             return "redirect:/imagegallery/user/showLoginForm";
@@ -105,7 +106,8 @@ public class RegisterController {
             System.out.println("Inside Error method" + bindingResult.getAllErrors());
             return "update-form";
         }
-        UserModel dbUser = userService.findUserById(userModel.getUserId());
+        UserModel sessionUser = (UserModel) session.getAttribute("user");
+        // UserModel dbUser = userService.findUserById(userModel.getUserId());
 
         if (!profilePic.isEmpty()) {
 
@@ -113,58 +115,56 @@ public class RegisterController {
             userModel.setProfilePic(ImageUtil.compressImage(profilePicByte));
             String imageType = profilePic.getContentType();
             userModel.setImageType(imageType);
-        } else if (profilePic.isEmpty() && dbUser != null) {
-            System.out.println("Inside elseif");
-            byte[] profilePicByte = dbUser.getProfilePic();
-            String imageType = dbUser.getImageType();
+        } else if (profilePic.isEmpty()) {
+            // System.out.println("Inside elseif");
+            byte[] profilePicByte = sessionUser.getProfilePic();
+            String imageType = sessionUser.getImageType();
             userModel.setImageType(imageType);
             userModel.setProfilePic(profilePicByte);
         }
+        int userId = (int) session.getAttribute("userId");
+        userModel.setUserId(userId);
         userService.updateUser(userModel);
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            new SecurityContextLogoutHandler().logout(request, response, auth);
-        }
+        // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // if (auth != null) {
+        // new SecurityContextLogoutHandler().logout(request, response, auth);
+        // }
         session.setAttribute("msg", "user updated succesffully");
-        return "redirect:/imagegallery/user/showLoginForm";
+        // return "redirect:/imagegallery/user/showLoginForm";
+        return "redirect:/logout";
 
     }
 
-    @GetMapping("/user/updateform/{userId}")
-    public String showUpdateForm(@PathVariable int userId, Model model, HttpSession session) {
+    @GetMapping("/user/updateform")
+    public String showUpdateForm(Model model, HttpSession session) {
 
-        UserModel userModel = userService.findUserById(userId);
-        if (userModel == null) {
-            session.setAttribute("msg", "User not found!!");
-            return "redirect:/imagegallery/user/showLoginForm";
-        } else {
-            model.addAttribute("userObj", userModel);
-            return "update-form";
-        }
+        // UserModel userModel = userService.findUserById(userId);
+        UserModel sessionUser = (UserModel) session.getAttribute("user");
+
+        model.addAttribute("userObj", sessionUser);
+        session.setAttribute("userId", sessionUser.getUserId());
+
+        return "update-form";
 
     }
 
-    @GetMapping("/user/delete/{userId}")
-    public String deleteAccount(@PathVariable int userId, Model model, HttpSession session, HttpServletRequest request,
+    @GetMapping("/user/delete")
+    public String deleteAccount(Model model, HttpSession session, HttpServletRequest request,
             HttpServletResponse response) {
 
-        UserModel userModel = userService.findUserById(userId);
+        UserModel sessionUser = (UserModel) session.getAttribute("user");
 
-        if (userModel == null) {
-            session.setAttribute("msg", "User not found!!");
-            return "redirect:/imagegallery/user/showLoginForm";
-        } else {
-            // Collection<RoleModel> roles = userModel.getRoles();
+        // Collection<RoleModel> roles = userModel.getRoles();
 
-            userService.deleteUser(userModel);
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null) {
-                new SecurityContextLogoutHandler().logout(request, response, auth);
-            }
-            session.setAttribute("msg", "user updated succesffully");
-            return "redirect:/imagegallery/user/showLoginForm";
-        }
+        userService.deleteUser(sessionUser);
+        // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // if (auth != null) {
+        // new SecurityContextLogoutHandler().logout(request, response, auth);
+        // }
+        // session.setAttribute("msg", "User Deleted succesffully");
+        model.addAttribute("msg", "User Deleted succesffully");
+        return "redirect:/logout";
 
     }
 

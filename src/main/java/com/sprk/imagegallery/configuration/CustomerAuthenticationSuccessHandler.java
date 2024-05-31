@@ -32,7 +32,7 @@ public class CustomerAuthenticationSuccessHandler implements AuthenticationSucce
         HttpSession session = request.getSession();
         session.setAttribute("user", dbUser);
 
-        response.sendRedirect(request.getContextPath() + "/imagegallery/user/image/images/" + dbUser.getUserId());
+        response.sendRedirect(request.getContextPath() + "/imagegallery/user/image/images");
 
         // request.getRequestDispatcher("/user/image/images").forward(request,
         // response); this will just forward ur request
