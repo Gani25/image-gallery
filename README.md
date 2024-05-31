@@ -4,13 +4,17 @@ Image Gallery is an open-source image sharing platform alternate to google photo
 
 ## Updates
 
-1. Update 1:
-1. In this project in update and delete button of images as well as in profile section, I was sending userId as well as image id and I found out that any user can inspect (browser tool) and may affect some one else images or content.
-1. I used the concept and session and I have deleted all the hidden form field from my form.
-1. There will be no chances of changing user id from developer tools.
-1. Now I am only sending image id and I have validate image id with session user. If matched then only user will be able to update or delete and of the content.
+- Update 1:
 
-1. Will Start updating this repo once I start pushing the updates
+  - In this project in update and delete button of images as well as in profile section, I was sending userId as well as image id and I found out that any user can inspect (browser tool) and may affect some one else images or content.
+  - I used the concept and session and I have deleted all the hidden form field from my form.
+  - There will be no chances of changing user id from developer tools.
+  - Now I am only sending image id and I have validate image id with session user. If matched then only user will be able to update or delete and of the content.
+
+- Initial Commit:
+  - Added Login and Logout authentication with role based authorization.
+  - Added forms for signup as well as forms for adding new image.
+  - Added dashboard to view image as well as profile page.
 
 ## Information
 
