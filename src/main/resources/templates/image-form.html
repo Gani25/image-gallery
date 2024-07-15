@@ -42,10 +42,20 @@
                     <input type="text" th:field="*{imageCaption}" class="form-control" id="caption">
 
                 </div>
-
-
                 <div class="form-text text-danger" th:if="${#fields.hasErrors('imageCaption')}"
                     th:errors="*{imageCaption}"></div>
+
+                <div class="mb-3 form-check">
+                    <input type="radio" th:field="*{publicImage}" value="true" class="form-check-input" id="pbImg">
+                    <label for="pbImg" class="form-check-label">Public</label>
+                </div>
+                <div class="mb-3 form-check">
+
+                    <input type="radio" th:field="*{publicImage}" value="false" class="form-check-input" id="prtImg"
+                        checked>
+                    <label for="prtImg" class="form-check-label">Private</label>
+                </div>
+
 
                 <button type="submit" class="btn btn-lg btn-outline-secondary mt-2 px-5">Post</button>
         </div>

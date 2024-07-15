@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sprk.imagegallery.model.ImageModel;
 import com.sprk.imagegallery.model.UserModel;
 import com.sprk.imagegallery.service.ImageService;
+import com.sprk.imagegallery.service.S3Service;
 import com.sprk.imagegallery.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -37,6 +38,9 @@ public class ImageController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private S3Service s3Service;
+
     private static String uploadDir = "src/main/resources/static/images";
 
     @GetMapping("/user/image")
@@ -44,6 +48,8 @@ public class ImageController {
         model.addAttribute("imageObj", new ImageModel());
         session.setAttribute("imageId", 0);
         session.setAttribute("imageTitle", "");
+
+        session.setAttribute("imageURL", "");
 
         return "image-form";
     }
@@ -58,8 +64,10 @@ public class ImageController {
             return "image-form";
         } else {
             String imageTitle = "";
+            String url = (String) session.getAttribute("imageURL");
             int imageId = (int) session.getAttribute("imageId");
             // System.out.println(imageId);
+            // System.out.println(url);
             String existingTitle = (String) session.getAttribute("imageTitle");
             if (!file.isEmpty()) {
 
@@ -67,17 +75,19 @@ public class ImageController {
 
                     // This case is for update
                     // if update user pass image then delete old image
-                    Path fileNameAndPath = Paths.get(uploadDir, existingTitle);
-                    System.out.println(fileNameAndPath);
-                    Files.deleteIfExists(fileNameAndPath);
+                    // Path fileNameAndPath = Paths.get(uploadDir, existingTitle);
+                    // System.out.println(fileNameAndPath);
+                    // Files.deleteIfExists(fileNameAndPath);
+
+                    s3Service.deleteFile(url);
+
                     // System.out.println(imageId);
                     imageModel.setImageId(imageId);
 
                 }
-                // save image
+
                 imageTitle = file.getOriginalFilename();
-                Path fileNameAndPath = Paths.get(uploadDir, imageTitle);
-                Files.write(fileNameAndPath, file.getBytes());
+                url = s3Service.uploadFile(file);
             } else {
                 if (imageId == 0) {
                     // When user is inserting record and didn't provide the image
@@ -96,6 +106,7 @@ public class ImageController {
             userModel = (UserModel) session.getAttribute("user");
 
             imageModel.setImageTitle(imageTitle);
+            imageModel.setUrl(url);
             imageModel.setUserModel(userModel);
 
             ImageModel savedImage = imageService.saveImage(imageModel);
@@ -139,9 +150,10 @@ public class ImageController {
                 result = imageService.deleteImage(dbImage);
                 String existingTitle = dbImage.getImageTitle();
                 if (result) {
-                    Path fileNameAndPath = Paths.get(uploadDir, existingTitle);
-                    System.out.println(fileNameAndPath);
-                    Files.deleteIfExists(fileNameAndPath);
+                    // Path fileNameAndPath = Paths.get(uploadDir, existingTitle);
+                    // System.out.println(fileNameAndPath);
+                    // Files.deleteIfExists(fileNameAndPath);
+                    s3Service.deleteFile(dbImage.getUrl());
                     session.setAttribute("msg", "Deleted successfully");
                 }
             } else {
@@ -170,6 +182,7 @@ public class ImageController {
                 model.addAttribute("imageObj", dbImage);
                 session.setAttribute("imageId", dbImage.getImageId());
                 session.setAttribute("imageTitle", dbImage.getImageTitle());
+                session.setAttribute("imageURL", dbImage.getUrl());
                 return "image-form";
             } else {
 

@@ -29,7 +29,7 @@
 
 
             <div class="card col-3" th:each="tempImage:${allImages}">
-                <img th:src="@{${'/images/'+tempImage.imageTitle}}" class="card-img-top card-img-custom" alt="...">
+                <img th:src="${tempImage.url}" class="card-img-top card-img-custom" alt="...">
                 <div class="card-body">
                     <p class="card-text " th:text="${tempImage.imageCaption}">Some quick example text to build on
                         the

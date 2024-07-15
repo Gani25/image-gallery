@@ -25,6 +25,10 @@ public class ImageModel {
 
     private String imageTitle;
 
+    private boolean publicImage;
+
+    private String url;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserModel userModel;

@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel updateRole(UserModel userModel) {
-        UserModel savedUser = userRepository.save(userModel);
-        return savedUser;
+        UserModel saved = userRepository.save(userModel);
+        return saved;
     }
 
     @Override
