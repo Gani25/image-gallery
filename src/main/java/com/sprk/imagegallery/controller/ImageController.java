@@ -1,11 +1,9 @@
 package com.sprk.imagegallery.controller;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +23,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -126,11 +123,33 @@ public class ImageController {
         }
     }
 
+    // @GetMapping("/")
+    // public String showHomePage(Model model) {
+    // List<ImageModel> allImages = imageService.getAllImagesByBoolean(true);
+    // model.addAttribute("allImages", allImages);
+
+    // return "image-dashboard";
+    // }
+
     @GetMapping("/user/image/images")
     public String showDashboard(Model model, HttpSession session) {
+
+        return showDashboardWithPagination(model, session, 1);
+    }
+
+    @GetMapping("/user/image/images/{pageNum}")
+    public String showDashboardWithPagination(Model model, HttpSession session, @PathVariable int pageNum) {
         UserModel sessionUser = (UserModel) session.getAttribute("user");
-        List<ImageModel> allImages = imageService.getAllImagesByUser(sessionUser);
+        Page<ImageModel> pages = imageService.getAllImagesByUser(sessionUser, pageNum);
+        List<ImageModel> allImages = pages.getContent();
+
         model.addAttribute("allImages", allImages);
+
+        model.addAttribute("pageNo", pages.getNumber());
+        model.addAttribute("totalElements", pages.getTotalElements());
+        model.addAttribute("elementPerPage", pages.getNumberOfElements());
+        model.addAttribute("totalPages", pages.getTotalPages());
+        model.addAttribute("pageSize", pages.getSize());
 
         return "image-dashboard";
     }

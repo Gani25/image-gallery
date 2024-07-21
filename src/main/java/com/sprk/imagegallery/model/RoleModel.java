@@ -5,6 +5,7 @@ import java.util.Collection;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,6 +16,7 @@ import lombok.ToString;
 
 @Entity
 @Data
+@ToString
 public class RoleModel {
 
     @Id
@@ -25,7 +27,6 @@ public class RoleModel {
     @NotEmpty
     private String name;
 
-    @ManyToMany(mappedBy = "roles", cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH })
+    @ManyToMany(mappedBy = "roles")
     private Collection<UserModel> users;
 }

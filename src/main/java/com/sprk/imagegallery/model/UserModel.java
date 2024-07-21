@@ -22,6 +22,7 @@ import lombok.ToString;
 
 @Entity
 @Data
+@ToString
 public class UserModel {
 
         @Id
@@ -36,7 +37,7 @@ public class UserModel {
         @Column(nullable = false, unique = true)
         private String email;
 
-        @NotBlank(message = "please enter password")
+        // @NotBlank(message = "please enter password")
         private String password;
 
         @Lob
@@ -45,8 +46,7 @@ public class UserModel {
 
         private String imageType;
 
-        @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-                        CascadeType.REFRESH }, fetch = FetchType.EAGER)
+        @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(name = "users_roles", joinColumns = {
                         @JoinColumn(name = "user_id") }, inverseJoinColumns = {
                                         @JoinColumn(name = "role_id") })

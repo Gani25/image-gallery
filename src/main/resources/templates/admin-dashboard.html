@@ -16,7 +16,7 @@
 
     <div th:replace="my-navbar :: nav"></div>
 
-    <div class="container my-container">
+    <div class="container my-container mb-5">
         <h1 class="text-center text-info-emphasis fs-1">Welcome to Image Gallery</h1>
         <div th:if="${session.msg}">
             <p class="text-success mt-2 text-center" th:text="${session.msg}"></p>
@@ -25,14 +25,22 @@
 
         </div>
 
-        <div class="mt-5">
+        <div class="my-5">
 
 
             <table class="table table-bordered table-hover w-75 mx-auto text-left">
                 <thead>
                     <tr class="table-dark">
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
+                        <th scope="col"><a class="link-underline link-underline-opacity-0 text-light"
+                                th:href="@{'/imagegallery/admin/listusers/'+${pageNo+1}+'?sortField=userName&sortDir='+${reverseSortDir}} ">Name
+                                <i th:if="${sortField.equals('userName')}" class="fas"
+                                    th:classappend="${sortDir.equalsIgnoreCase('ASC')} ? 'fa-arrow-down' : 'fa-arrow-up'"></i>
+                            </a></th>
+                        <th scope="col"><a class="link-underline link-underline-opacity-0 text-light"
+                                th:href="@{'/imagegallery/admin/listusers/'+${pageNo+1}+'?sortField=email&sortDir='+${reverseSortDir}} ">email
+                                <i th:if="${sortField.equals('email')}" class="fas"
+                                    th:classappend="${sortDir.equalsIgnoreCase('ASC')} ? 'fa-arrow-down' : 'fa-arrow-up'"></i>
+                            </a></th>
                         <th scope="col">Roles</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -49,9 +57,47 @@
                         <td><a th:href="@{/imagegallery/admin/addrole/{userId}(userId=${tempUser.userId})}"
                                 class="btn btn-outline-dark">Add Role</a></td>
                     </tr>
-
+                </tbody>
+            </table>
 
         </div>
+
+        <div class="d-flex justify-content-center " th:if="${totalPages>1}">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
+                        <a class="page-link"
+                            th:href="@{'/imagegallery/admin/listusers/1?sortField='+${sortField}+'&sortDir='+${sortDir}}">&laquo;
+                            Page
+                            1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
+                        <a class="page-link"
+                            th:href="@{'/imagegallery/admin/listusers/'+${pageNo}+'?sortField='+${sortField}+'&sortDir='+${sortDir}} ">Previous</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"
+                        th:classappend="${i == pageNo+1}?'active':''"><a class="page-link"
+                            th:href="@{'/imagegallery/admin/listusers/'+${i}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">[[${i}]]</a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
+                        <a class="page-link"
+                            th:href="@{'/imagegallery/admin/listusers/'+${pageNo+2}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">Next</a>
+                    </li>
+                    <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
+                        <a class="page-link"
+                            th:href="@{'/imagegallery/admin/listusers/'+${totalPages}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">&raquo;
+                            Last Page</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="d-flex justify-content-center">Showing page [[${pageNo+1}]] of [[${totalPages}]]</div>
+        <div class="d-flex justify-content-center">Showing [[${pageNo*pageSize + 1}]] - [[${pageNo* pageSize +
+            elementPerPage}]] records out of
+            [[${totalElements}]] elements
+        </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -31,6 +31,10 @@
 
                 <p class="alert alert-success col-xs-offset-1 col-xs-10">Logout Successfull</p>
             </div>
+            <div class="my-5">
+                <a href="/oauth2/authorization/google" class="btn btn-lg btn-outline-secondary"><i
+                        class="fa-brands fa-google"></i> Login</a>
+            </div>
             <form th:action="@{/authenticateUser}" method="post">
 
                 <div th:if="${msg}">

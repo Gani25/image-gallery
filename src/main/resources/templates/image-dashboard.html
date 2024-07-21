@@ -16,7 +16,7 @@
 
     <div th:replace="my-navbar :: nav"></div>
 
-    <div class="container my-container">
+    <div class="container my-container mb-5">
         <h1 class="text-center text-info-emphasis fs-1">Welcome to Image Gallery</h1>
         <div th:if="${session.msg}">
             <p class="text-success mt-2 text-center" th:text="${session.msg}"></p>
@@ -24,7 +24,7 @@
 
 
         </div>
-        <div class="mt-5 d-flex justify-content-center gap-5 flex-wrap">
+        <div class="mt-5 d-flex justify-content-center gap-5 flex-wrap mb-5">
 
 
 
@@ -47,8 +47,37 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="d-flex justify-content-center " th:if="${totalPages>1}">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
+                        <a class="page-link" th:href="@{/imagegallery/user/image/images/1}">&laquo; Page
+                            1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
+                        <a class="page-link" th:href="@{'/imagegallery/user/image/images/'+${pageNo}} ">Previous</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"
+                        th:classappend="${i == pageNo+1}?'active':''"><a class="page-link"
+                            th:href="@{'/imagegallery/user/image/images/'+${i}}">[[${i}]]</a>
+                    </li>
 
+                    <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
+                        <a class="page-link" th:href="@{'/imagegallery/user/image/images/'+${pageNo+2}}">Next</a>
+                    </li>
+                    <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
+                        <a class="page-link" th:href="@{'/imagegallery/user/image/images/'+${totalPages}}">&raquo;
+                            Last Page</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="d-flex justify-content-center">Showing page [[${pageNo+1}]] of [[${totalPages}]]</div>
+        <div class="d-flex justify-content-center">Showing [[${pageNo*pageSize + 1}]] - [[${pageNo* pageSize +
+            elementPerPage}]] records out of
+            [[${totalElements}]] elements
         </div>
 
         <div sec:authorize="hasRole('ROLE_ADMIN')" class="mt-5 d-flex justify-content-center align-items-center">

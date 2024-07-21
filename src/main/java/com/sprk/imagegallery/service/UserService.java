@@ -2,6 +2,7 @@ package com.sprk.imagegallery.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -20,7 +21,7 @@ public interface UserService extends UserDetailsService {
 
     UserDTO getUserByUserId(int userId);
 
-    List<UserModel> getAllUsers();
+    Page<UserModel> getAllUsers(int pageNum, String sortField, String sortDir);
 
     void removeSessionMsg();
 

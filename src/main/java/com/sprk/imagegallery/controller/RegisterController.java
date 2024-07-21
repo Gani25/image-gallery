@@ -1,9 +1,12 @@
 package com.sprk.imagegallery.controller;
 
 import java.util.Collection;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sprk.imagegallery.configuration.ImageUtil;
+import com.sprk.imagegallery.model.ImageModel;
 import com.sprk.imagegallery.model.RoleModel;
 import com.sprk.imagegallery.model.UserDTO;
 import com.sprk.imagegallery.model.UserModel;
+import com.sprk.imagegallery.service.ProfilePictureGenerator;
 import com.sprk.imagegallery.service.RoleService;
 import com.sprk.imagegallery.service.UserService;
 
@@ -35,6 +40,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RegisterController {
 
     private UserService userService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public RegisterController(UserService userService) {
         this.userService = userService;
@@ -70,7 +78,14 @@ public class RegisterController {
                 userModel.setProfilePic(ImageUtil.compressImage(profilePicByte));
                 String imageType = profilePic.getContentType();
                 userModel.setImageType(imageType);
+            } else {
+                byte[] generatedImage = ProfilePictureGenerator.generateProfilePicture(userModel.getUserName());
+                userModel.setProfilePic(ImageUtil.compressImage(generatedImage));
+                userModel.setImageType("image/png");
             }
+            String encodedPassword = bCryptPasswordEncoder.encode(userModel.getPassword());
+            userModel.setPassword(encodedPassword);
+
             userService.saveUser(userModel);
             session.setAttribute("msg", "user saved succesffully");
 
@@ -155,15 +170,9 @@ public class RegisterController {
 
         UserModel sessionUser = (UserModel) session.getAttribute("user");
 
-        // Collection<RoleModel> roles = userModel.getRoles();
-
         userService.deleteUser(sessionUser);
-        // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        // if (auth != null) {
-        // new SecurityContextLogoutHandler().logout(request, response, auth);
-        // }
-        // session.setAttribute("msg", "User Deleted succesffully");
         model.addAttribute("msg", "User Deleted succesffully");
+        session.removeAttribute("user");
         return "redirect:/logout";
 
     }

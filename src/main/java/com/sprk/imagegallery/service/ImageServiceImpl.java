@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -18,6 +21,8 @@ import jakarta.servlet.http.HttpSession;
 @Service
 public class ImageServiceImpl implements ImageService {
 
+    private final int PAGE_SIZE = 3;
+
     @Autowired
     private ImageRepository imageRepository;
 
@@ -28,10 +33,19 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<ImageModel> getAllImagesByUser(UserModel model) {
+    public Page<ImageModel> getAllImagesByUser(UserModel model, int pageNum) {
         // TODO Auto-generated method stub
-        List<ImageModel> allImages = imageRepository.findByUserModel(model);
-        return allImages;
+        Pageable pageable = PageRequest.of(pageNum - 1, PAGE_SIZE);
+        Page<ImageModel> pages = imageRepository.findByUserModel(model, pageable);
+        return pages;
+    }
+
+    @Override
+    public Page<ImageModel> getAllImagesByBoolean(boolean b, int pageNum) {
+        Pageable pageable = PageRequest.of(pageNum - 1, PAGE_SIZE);
+        Page<ImageModel> pages = imageRepository.findByPublicImage(b, pageable);
+
+        return pages;
     }
 
     @Override

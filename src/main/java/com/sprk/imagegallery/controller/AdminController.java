@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sprk.imagegallery.model.RoleModel;
 import com.sprk.imagegallery.model.UserModel;
@@ -31,9 +33,26 @@ public class AdminController {
 
     @GetMapping("/admin/listusers")
     public String getAllUsers(Model model) {
-        List<UserModel> allUsers = userService.getAllUsers();
+
+        return getAllUsersWithPaginationAndSorting("userName", "ASC", model, 1);
+    }
+
+    @GetMapping("/admin/listusers/{pageNum}")
+    public String getAllUsersWithPaginationAndSorting(@RequestParam(name = "sortField") String sortField,
+            @RequestParam(name = "sortDir") String sortDir, Model model, @PathVariable int pageNum) {
+        Page<UserModel> pages = userService.getAllUsers(pageNum, sortField, sortDir);
+        List<UserModel> allUsers = pages.getContent();
         // System.out.println(allUsers);
         model.addAttribute("users", allUsers);
+        model.addAttribute("pageNo", pages.getNumber());
+        model.addAttribute("totalElements", pages.getTotalElements());
+        model.addAttribute("elementPerPage", pages.getNumberOfElements());
+        model.addAttribute("totalPages", pages.getTotalPages());
+        model.addAttribute("pageSize", pages.getSize());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equalsIgnoreCase("ASC") ? "Desc" : "Asc");
+
         return "admin-dashboard";
     }
 
