@@ -49,35 +49,38 @@
 
         </div>
 
-        <div class="d-flex justify-content-center" th:if="${totalPages>1}">
-            <nav aria-label="...">
-                <ul class="pagination">
-                    <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
-                        <a class="page-link" th:href="@{/1}">&laquo; Page
-                            1</a>
-                    </li>
-                    <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
-                        <a class="page-link" th:href="@{'/'+${pageNo}} ">Previous</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"
-                        th:classappend="${i == pageNo+1}?'active':''"><a class="page-link"
-                            th:href="@{'/'+${i}}">[[${i}]]</a>
-                    </li>
+        <div th:if="${totalPages>1}">
 
-                    <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
-                        <a class="page-link" th:href="@{'/'+${pageNo+2}}">Next</a>
-                    </li>
-                    <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
-                        <a class="page-link" th:href="@{'/'+${totalPages}}">&raquo;
-                            Last Page</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div class="d-flex justify-content-center">Showing page [[${pageNo+1}]] of [[${totalPages}]]</div>
-        <div class="d-flex justify-content-center">Showing [[${pageNo*pageSize + 1}]] - [[${pageNo* pageSize +
-            elementPerPage}]] records out of
-            [[${totalElements}]] elements
+            <div class="d-flex justify-content-center">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
+                            <a class="page-link" th:href="@{/1}">&laquo; Page
+                                1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
+                            <a class="page-link" th:href="@{'/'+${pageNo}} ">Previous</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"
+                            th:classappend="${i == pageNo+1}?'active':''"><a class="page-link"
+                                th:href="@{'/'+${i}}">[[${i}]]</a>
+                        </li>
+
+                        <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
+                            <a class="page-link" th:href="@{'/'+${pageNo+2}}">Next</a>
+                        </li>
+                        <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
+                            <a class="page-link" th:href="@{'/'+${totalPages}}">&raquo;
+                                Last Page</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="d-flex justify-content-center">Showing page [[${pageNo+1}]] of [[${totalPages}]]</div>
+            <div class="d-flex justify-content-center">Showing [[${pageNo*pageSize + 1}]] - [[${pageNo* pageSize +
+                elementPerPage}]] records out of
+                [[${totalElements}]] elements
+            </div>
         </div>
     </div>
 
