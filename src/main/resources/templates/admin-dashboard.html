@@ -61,43 +61,43 @@
             </table>
 
         </div>
+        <div th:if="${totalPages>1}">
+            <div class="d-flex justify-content-center ">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
+                            <a class="page-link"
+                                th:href="@{'/imagegallery/admin/listusers/1?sortField='+${sortField}+'&sortDir='+${sortDir}}">&laquo;
+                                Page
+                                1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
+                            <a class="page-link"
+                                th:href="@{'/imagegallery/admin/listusers/'+${pageNo}+'?sortField='+${sortField}+'&sortDir='+${sortDir}} ">Previous</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"
+                            th:classappend="${i == pageNo+1}?'active':''"><a class="page-link"
+                                th:href="@{'/imagegallery/admin/listusers/'+${i}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">[[${i}]]</a>
+                        </li>
 
-        <div class="d-flex justify-content-center " th:if="${totalPages>1}">
-            <nav aria-label="...">
-                <ul class="pagination">
-                    <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
-                        <a class="page-link"
-                            th:href="@{'/imagegallery/admin/listusers/1?sortField='+${sortField}+'&sortDir='+${sortDir}}">&laquo;
-                            Page
-                            1</a>
-                    </li>
-                    <li class="page-item" th:classappend="${pageNo == 0}?'disabled':''">
-                        <a class="page-link"
-                            th:href="@{'/imagegallery/admin/listusers/'+${pageNo}+'?sortField='+${sortField}+'&sortDir='+${sortDir}} ">Previous</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"
-                        th:classappend="${i == pageNo+1}?'active':''"><a class="page-link"
-                            th:href="@{'/imagegallery/admin/listusers/'+${i}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">[[${i}]]</a>
-                    </li>
-
-                    <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
-                        <a class="page-link"
-                            th:href="@{'/imagegallery/admin/listusers/'+${pageNo+2}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">Next</a>
-                    </li>
-                    <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
-                        <a class="page-link"
-                            th:href="@{'/imagegallery/admin/listusers/'+${totalPages}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">&raquo;
-                            Last Page</a>
-                    </li>
-                </ul>
-            </nav>
+                        <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
+                            <a class="page-link"
+                                th:href="@{'/imagegallery/admin/listusers/'+${pageNo+2}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">Next</a>
+                        </li>
+                        <li class="page-item" th:classappend="${pageNo+1 == totalPages}?'disabled':''">
+                            <a class="page-link"
+                                th:href="@{'/imagegallery/admin/listusers/'+${totalPages}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">&raquo;
+                                Last Page</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="d-flex justify-content-center">Showing page [[${pageNo+1}]] of [[${totalPages}]]</div>
+            <div class="d-flex justify-content-center">Showing [[${pageNo*pageSize + 1}]] - [[${pageNo* pageSize +
+                elementPerPage}]] records out of
+                [[${totalElements}]] elements
+            </div>
         </div>
-        <div class="d-flex justify-content-center">Showing page [[${pageNo+1}]] of [[${totalPages}]]</div>
-        <div class="d-flex justify-content-center">Showing [[${pageNo*pageSize + 1}]] - [[${pageNo* pageSize +
-            elementPerPage}]] records out of
-            [[${totalElements}]] elements
-        </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
