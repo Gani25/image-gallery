@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
         List<ImageModel> images = imageRepository.findByUserModel(userModel);
         for (ImageModel image : images) {
             s3Service.deleteFile(image.getUrl());
+            imageRepository.delete(image);
         }
 
         userRepository.delete(userModel);
