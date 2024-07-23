@@ -7,6 +7,7 @@ Image Gallery is an open-source image sharing platform alternate to google photo
 - [Image Gallery](#image-gallery)
 - [Table Of Contents:](#table-of-contents)
   - [Updates](#updates)
+    - [Update 4:](#update-4)
     - [Update 3:](#update-3)
     - [Update 2:](#update-2)
     - [Update 1:](#update-1)
@@ -15,6 +16,10 @@ Image Gallery is an open-source image sharing platform alternate to google photo
     - [Dependencies](#dependencies)
 
 ## Updates
+
+### Update 4:
+
+- Delete account bug fixed. On deleting the user **images** with respect to that **particular user** was **not deleting** from database
 
 ### Update 3:
 
