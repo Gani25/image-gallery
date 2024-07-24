@@ -31,6 +31,11 @@
 
 
             </div>
+            <div class="my-5">
+                <a href="/oauth2/authorization/google" class="btn btn-lg btn-outline-secondary"><i
+                        class="fa-brands fa-google"></i>
+                    Register</a>
+            </div>
 
             <form th:action="@{/imagegallery/user/signup}" th:object="${userObj}" method="post"
                 enctype="multipart/form-data">
